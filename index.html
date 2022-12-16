@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRAG AND DROP </title>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .drop-zone {
+            width: 100px;
+            height: 100px;
+            float: left;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 8px dashed black;
+            border-radius: 5px;
+
+        }
+
+        .drop-zone--over {
+            opacity: 0.5;
+        }
+
+        #myDraggableElement {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            background-color: blueviolet;
+        }
+
+        .tombol-1 {
+            color: blueviolet;
+            font-weight: bold;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Drag and drop-zone</h1>
+    <p>Ini sepertinya lebih cocok ke draf file juga tapi belum bisa drag drop elemetn dan berpindah otomatis</p>
+    <ul>
+        <li>allows you to drag and drop any element</li>
+        <li>commonly used to allow dragging in files for update</li>
+    </ul>
+
+
+    <div class="drop-zone" style="border-color: #de4031;"  >
+        <div id="myDraggableElement" draggable="true"></div>
+    </div>
+    <div class="drop-zone" style="border-color: #31CFDE;"></div>
+
+    <input type="file" multiple id="myFile">
+
+    <br>
+
+
+    <section>
+        <a href="index2.html" class="tombol-1">Lihat drag and drop lain</a>
+    </section>
+
+    <script>
+        const draggableElement = document.querySelector("#myDraggableElement");
+
+        draggableElement.addEventListener("dragstart", e=> {
+            e.dataTransfer.setData("text/plain", draggableElement.id);
+        })
+
+        for(const dropZone of document.querySelectorAll(".drop-zone")) {
+            dropZone.addEventListener("dragover", e=> {
+                e.preventDefault();
+                // console.log(e);
+                dropZone.classList.add("drop-zone--over");
+            });
+
+
+            dropZone.addEventListener("dragleave", e => {
+                dropZone.classList.remove("drop-zone--over");
+            })
+
+
+            dropZone.addEventListener("drop", e => {
+                e.preventDefault();
+                console.log(e.dataTransfer.files);
+                document.getElementById("myFile").files = e.dataTransfer.files;
+
+                
+                const droppedElementId = e.dataTransfer.getData("text/plain");
+                // console.log(droppedElementId);
+                const droppedElement = document.getElementById(droppedElementId);
+
+                dropZone.appendChild(draggableElement);
+                dropZone.classList.remove("drop-zone--over");
+
+
+            })
+        }
+
+
+     </script>
+</body>
+</html>
